@@ -5,7 +5,7 @@ app.use(bodyParser.json());
 const database = {
 	users: [
 		{
-			id: 1,
+			id: "1",
 			name: "NAME",
 			email: "EMAIL",
 			password: "PASSWORD",
@@ -13,7 +13,7 @@ const database = {
 			joined: new Date()
 		},
 		{
-			id: 2,
+			id: "2",
 			name: "NAME2",
 			email: "EMAIL2",
 			password: "PASSWORD2",
@@ -50,6 +50,16 @@ app.post("/register", (req, res) => {
 		joined: new Date()
 	});
 	res.json(database.users[database.users.length - 1]);
+});
+app.get("/profile/:id", (req, res) => {
+	const { id } = req.params;
+	database.users.forEach(user => {
+		if (user.id === id) {
+			res.json(user);
+		} else {
+			res.json("no user");
+		}
+	});
 });
 
 /*
