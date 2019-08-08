@@ -38,6 +38,14 @@ app.get("", (req, resp) => {
 	resp.send(database.users);
 });
 app.post("/signin", (req, resp) => {
+	// Load hash from your password DB.
+bcrypt.compare("PASSWORD5", "$2a$10$RLfodrpJVECnnEEVawrbp.C3hSBrFQeTEaDfltwMrOCRGOxcQnMlC", function(err, res) {
+console.log(res)
+});
+bcrypt.compare("veggies", "$2a$10$RLfodrpJVECnnEEVawrbp.C3hSBrFQeTEaDfltwMrOCRGOxcQnMlC", function(err, res) {
+console.log(res)
+});
+
 	if (
 		req.body.email === database.users[0].email &&
 		req.body.password === database.users[0].password
@@ -89,10 +97,3 @@ app.post("/images", (req, res) => {
 	}
 });
 
-// // Load hash from your password DB.
-// bcrypt.compare("bacon", hash, function(err, res) {
-// 	// res == true
-// });
-// bcrypt.compare("veggies", hash, function(err, res) {
-// 	// res = false
-// });
