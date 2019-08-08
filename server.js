@@ -27,7 +27,7 @@ app.listen(3000, () => {
 	console.log("listen");
 });
 app.get("", (req, resp) => {
-	resp.send("hello");
+	resp.send(database.users);
 });
 app.post("/signin", (req, resp) => {
 	if (
@@ -38,6 +38,18 @@ app.post("/signin", (req, resp) => {
 	} else {
 		resp.status(400).json("error");
 	}
+});
+app.post("/register", (req, res) => {
+	const { name, email, password } = req.body;
+	database.users.push({
+		id: 1,
+		name: name,
+		email: email,
+		password: password,
+		entries: 0,
+		joined: new Date()
+	});
+	res.json(database.users[database.users.length - 1]);
 });
 
 /*
