@@ -42,7 +42,7 @@ app.post("/signin", (req, resp) => {
 app.post("/register", (req, res) => {
 	const { name, email, password } = req.body;
 	database.users.push({
-		id: 1,
+		id: "3",
 		name: name,
 		email: email,
 		password: password,
@@ -53,20 +53,27 @@ app.post("/register", (req, res) => {
 });
 app.get("/profile/:id", (req, res) => {
 	const { id } = req.params;
+	let found = false;
 	database.users.forEach(user => {
 		if (user.id === id) {
-			res.json(user);
-		} else {
-			res.json("no user");
+			found = true;
+			return res.json(user);
 		}
 	});
+	if (!found) {
+		res.status(400).json("not found");
+	}
 });
-
-/*
-res = working
-signin = post = sucess/fail
-register = post = user
-profile/:userID = GET = user
-image = PUT = user
-
-*/
+app.post("/images", (req, res) => {
+	database.users.forEach(user => {
+		const { id } = req.body;
+		if (user.id === id) {
+			found = true;
+			user.entries++;
+			return res.json(user.entries);
+		}
+	});
+	if (!found) {
+		res.status(400).json("not found");
+	}
+});
