@@ -52,7 +52,7 @@ console.log(res)
 		req.body.email === database.users[0].email &&
 		req.body.password === database.users[0].password
 	) {
-		resp.json("sucess");
+		resp.json("success");
 	} else {
 		resp.status(400).json("error");
 	}
