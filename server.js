@@ -2,8 +2,8 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt-nodejs");
-const cors = require("cors")
-app.use(cors())
+const cors = require("cors");
+app.use(cors());
 app.use(bodyParser.json());
 const database = {
 	users: [
@@ -41,12 +41,20 @@ app.get("", (req, resp) => {
 });
 app.post("/signin", (req, resp) => {
 	// Load hash from your password DB.
-bcrypt.compare("PASSWORD5", "$2a$10$RLfodrpJVECnnEEVawrbp.C3hSBrFQeTEaDfltwMrOCRGOxcQnMlC", function(err, res) {
-console.log(res)
-});
-bcrypt.compare("veggies", "$2a$10$RLfodrpJVECnnEEVawrbp.C3hSBrFQeTEaDfltwMrOCRGOxcQnMlC", function(err, res) {
-console.log(res)
-});
+	bcrypt.compare(
+		"PASSWORD5",
+		"$2a$10$RLfodrpJVECnnEEVawrbp.C3hSBrFQeTEaDfltwMrOCRGOxcQnMlC",
+		function(err, res) {
+			console.log(res);
+		}
+	);
+	bcrypt.compare(
+		"veggies",
+		"$2a$10$RLfodrpJVECnnEEVawrbp.C3hSBrFQeTEaDfltwMrOCRGOxcQnMlC",
+		function(err, res) {
+			console.log(res);
+		}
+	);
 
 	if (
 		req.body.email === database.users[0].email &&
@@ -66,7 +74,6 @@ app.post("/register", (req, res) => {
 		id: "3",
 		name: name,
 		email: email,
-		password: password,
 		entries: 0,
 		joined: new Date()
 	});
@@ -85,9 +92,10 @@ app.get("/profile/:id", (req, res) => {
 		res.status(400).json("not found");
 	}
 });
-app.post("/images", (req, res) => {
+app.put("/image", (req, res) => {
+	const { id } = req.body;
+	let found = false
 	database.users.forEach(user => {
-		const { id } = req.body;
 		if (user.id === id) {
 			found = true;
 			user.entries++;
@@ -98,4 +106,3 @@ app.post("/images", (req, res) => {
 		res.status(400).json("not found");
 	}
 });
-
