@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt-nodejs");
+const cors = require("cors")
+app.use(cors())
 app.use(bodyParser.json());
 const database = {
 	users: [
