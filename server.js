@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const cors = require("cors")
+app.use(cors())
 app.use(bodyParser.json());
 app.listen(3000);
 const database = {
@@ -27,9 +29,9 @@ app.get("", (req, res) => {
 	res.json(database.users);
 });
 app.post("/signin", (req, res) => {
-	const { name, password } = req.body;
+	const { email, password } = req.body;
 	if (
-		name === database.users[0].name &&
+		email === database.users[0].email &&
 		password === database.users[0].password
 	) {
 		res.json("ok");
