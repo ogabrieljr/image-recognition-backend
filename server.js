@@ -34,7 +34,7 @@ app.post("/signin", (req, res) => {
 		email === database.users[0].email &&
 		password === database.users[0].password
 	) {
-		res.json("ok");
+		res.json(database.users[0])
 	} else {
 		res.status(400).json("not found");
 	}
@@ -60,12 +60,12 @@ app.get("/profile/:id", (req, res) => {
 	}
 	res.status(400).json("not found");
 });
-app.put("/images", (req, res) => {
+app.put("/image", (req, res) => {
 	const { id } = req.body;
 	for (const i of database.users) {
 		if (id === i.id) {
 			i.entries++;
-			return res.json(i.entries);
+			return res.json(i);
 		}
 	}
 	res.json("not found");
