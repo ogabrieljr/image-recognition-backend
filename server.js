@@ -21,7 +21,7 @@ knex.select("*").from("users");
 
 app.use(cors());
 app.use(bodyParser.json());
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
 
 const clarifaiApp = new Clarifai.App({
 	apiKey: "de6c435c4bc94e4394563714d9928850"
@@ -74,3 +74,5 @@ app.put("/image", (req, res) => {
 		})
 		.catch(err => res.status(400).json("not ok"));
 });
+
+console.log(process.env)
