@@ -38,7 +38,7 @@ app.post("/imageurl", (req, res) => {
 		.then(data => res.json(data));
 });
 
-app.get("", (req, res) => res.json("its working"));
+app.get("/", (req, res) => res.json("its working"));
 
 app.post("/signin", signin.handleSignin(knex, bcrypt));
 
@@ -74,5 +74,3 @@ app.put("/image", (req, res) => {
 		})
 		.catch(err => res.status(400).json("not ok"));
 });
-
-console.log(process.env)
