@@ -38,7 +38,7 @@ app.post("/imageurl", (req, res) => {
 		.then(data => res.json(data));
 });
 
-app.get("", (req, res) => res.json(database.users));
+app.get("", (req, res) => res.json("its working"));
 
 app.post("/signin", signin.handleSignin(knex, bcrypt));
 
