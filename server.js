@@ -5,10 +5,8 @@ const cors = require("cors");
 const knex = require("knex")({
 	client: "pg",
 	connection: {
-		host: "postgresql-rigid-63200",
-		user: "postgres",
-		password: "",
-		database: "image-recognition"
+		connectionString: process.env.DATABASE_URL,
+		ssl: true
 	}
 });
 const bcrypt = require("bcrypt-nodejs");
