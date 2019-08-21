@@ -12,6 +12,9 @@ const knex = require("knex")({
 	}
 });
 const bcrypt = require("bcrypt-nodejs");
+const register = require("./controllers/register");
+const signin = require("./controllers/signin");
+const Clarifai = require("clarifai");
 
 knex.select("*").from("users");
 // .then(data => console.log(data));
@@ -20,60 +23,29 @@ app.use(cors());
 app.use(bodyParser.json());
 app.listen(3000);
 
-app.get("", (req, res) => {
-	res.json(database.users);
+const clarifaiApp = new Clarifai.App({
+	apiKey: "de6c435c4bc94e4394563714d9928850"
 });
-app.post("/signin", (req, res) => {
-	knex
-		.select("email", "hash")
-		.from("login")
-		.where("email", "=", req.body.email)
-		.then(data => {
-			const isValid = bcrypt.compareSync(req.body.password, data[0].hash);
-			if (isValid) {
-				return knex
-					.select("*")
-					.from("users")
-					.where("email", "=", req.body.email)
-					.then(user => {
-						res.json(user[0]);
-					})
-					.catch(err => res.status(400).json("unable to get user"));
-			} else {
-				res.status(400).json("wrong")
-			} 
+
+app.post("/imageurl", (req, res) => {
+	clarifaiApp.models
+		.initModel({
+			id: Clarifai.FACE_DETECT_MODEL
 		})
-		.catch(err => res.status(400).json("wrong"));
-});
-app.post("/register", (req, res) => {
-	const { name, email, password } = req.body;
-	const hash = bcrypt.hashSync(password);
-	knex
-		.transaction(trx => {
-			trx
-				.insert({
-					hash: hash,
-					email: email
-				})
-				.into("login")
-				.returning("email")
-				.then(loginEmail => {
-					return trx("users")
-						.returning("*")
-						.insert({
-							name,
-							email: loginEmail[0],
-							joined: new Date()
-						})
-						.then(user => {
-							res.json(user[0]);
-						});
-				})
-				.then(trx.commit)
-				.catch(trx.rollback);
+		.then(generalModel => {
+			return generalModel.predict(req.body.input);
 		})
-		.catch(err => res.status(400).json("unable to register"));
+		.then(data => res.json(data));
 });
+
+app.get("", (req, res) => res.json(database.users));
+
+app.post("/signin", signin.handleSignin(knex, bcrypt));
+
+app.post("/register", (req, res) =>
+	register.handleRegister(req, res, knex, bcrypt)
+);
+
 app.get("/profile/:id", (req, res) => {
 	const { id } = req.params;
 	knex
@@ -90,6 +62,7 @@ app.get("/profile/:id", (req, res) => {
 			}
 		});
 });
+
 app.put("/image", (req, res) => {
 	const { id } = req.body;
 	knex("users")
