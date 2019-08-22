@@ -1,0 +1,17 @@
+create table users (name text, age smallint, birthday date);
+insert into users (name, age, birthday) values ('NAME', 20, '1990-12-20');
+alter table users add score smallint;
+update users set score = 50 where name='NAME';
+update users set score = 100 where name = 'NAME2' OR name = 'NAME3';
+
+select * from users join login on user.name = login.name;
+delete from users where name = 'NAME';
+
+create table users (id serial primary key, name varchar(100), email text unique not null, entries bigint default 0, joined timestamp not null);
+select * from users;
+create table login (id serial primary key, hash varchar(100) not null, email text unique not null);
+
+truncate table;
+update users set name = 'NAME2' where id = 24;
+alter table users alter column email set not null;
+
